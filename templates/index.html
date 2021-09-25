@@ -8,9 +8,13 @@
 </head>
 <body>
     <h3>Flask site</h3>
+    <form action="/add/" method="POST">
+    <input type="text" name="good" >
+    <button>Добавить</button>
+</form>
     <ol>
-        {% for goods in tovar %}
-            <li> {{ goods }}</li>
+        {% for good in tovar %}
+            <li> {{ good }}</li>
         {% endfor %}
     </ol>
 </body>
