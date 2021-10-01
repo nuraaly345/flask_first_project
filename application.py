@@ -1,30 +1,35 @@
 from flask import Flask, render_template, request
-from openpyxl import load_workbook
+from openpyxl import load_workbook, Workbook
+
 
  
 app = Flask(__name__)
 
 @app.route('/')
 def homepage():
-    excel = load_workbook('task.xlsx')
-    page = excel['Sheet']
-    string = page['A']
-    li = []
-    for j in range(len(string)):
-        li.append(string[j].value)
+    try:
+        excel = load_workbook('task.xlsx')
+    except:
+        excel = Workbook()
+    page = excel.active
+    goods = [cell.value for cell in page["A"]]
+    excel.save('task,xlsx')
         
-    return render_template('index.html', tovar = li)
+    return render_template('index.html', tovar = goods)
 
 
 @app.route('/add/', methods=["POST"])
 def add():
-    goods = request.form['good']
-    excel = load_workbook('task.xlsx')
+    good = request.form['good']
+    try:
+        excel = excel = load_workbook('task.xlsx')
+    except:
+        excel = Workbook()
+
     page = excel.active
-    m_row = page.max_row
-    for i in range(1, m_row + 1):
-        cell_obj = page.cell(row = i, column=1)
-        cell_obj.value = goods
+    page.append([good])
+    excel.save("task.xlsx")
+    
    
         
 
